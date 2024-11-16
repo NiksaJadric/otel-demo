@@ -12,3 +12,8 @@ scrape_configs:
   static_configs:
   - targets:
     - 'otelcol:8888'
+- job_name: 'cadvisor'
+  static_configs:
+  - targets:
+    - 'cadvisor:8080'
+
