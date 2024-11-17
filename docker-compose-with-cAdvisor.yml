@@ -29,7 +29,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 120M
+          memory: 150M
     restart: unless-stopped
     environment:
       - KAFKA_SERVICE_ADDR
@@ -58,7 +58,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 300M
+          memory: 350M
     restart: unless-stopped
     ports:
       - "${AD_SERVICE_PORT}"
@@ -90,7 +90,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 160M
+          memory: 190M
     restart: unless-stopped
     ports:
       - "${CART_SERVICE_PORT}"
@@ -124,7 +124,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 20M
+          memory: 30M
     restart: unless-stopped
     ports:
       - "${CHECKOUT_SERVICE_PORT}"
@@ -178,7 +178,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 20M
+          memory: 30M
     restart: unless-stopped
     ports:
       - "${CURRENCY_SERVICE_PORT}"
@@ -204,7 +204,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 100M
+          memory: 130M
     restart: unless-stopped
     ports:
       - "${EMAIL_SERVICE_PORT}"
@@ -233,7 +233,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 300M
+          memory: 350M
     restart: unless-stopped
     environment:
       - FLAGD_HOST
@@ -264,7 +264,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 250M
+          memory: 300M
     restart: unless-stopped
     ports:
       - "${FRONTEND_PORT}"
@@ -323,7 +323,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 50M
+          memory: 100M
     restart: unless-stopped
     ports:
       - "${ENVOY_PORT}:${ENVOY_PORT}"
@@ -372,7 +372,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 120M
+          memory: 150M
     restart: unless-stopped
     ports:
       - "${IMAGE_PROVIDER_PORT}"
@@ -399,7 +399,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 1G
+          memory: 2G
     restart: unless-stopped
     ports:
       - "${LOCUST_WEB_PORT}"
@@ -437,7 +437,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 120M
+          memory: 150M
     restart: unless-stopped
     ports:
       - "${PAYMENT_SERVICE_PORT}"
@@ -468,7 +468,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 20M
+          memory: 30M
     restart: unless-stopped
     ports:
       - "${PRODUCT_CATALOG_SERVICE_PORT}"
@@ -499,7 +499,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 40M
+          memory: 50M
     restart: unless-stopped
     ports:
       - "${QUOTE_SERVICE_PORT}"
@@ -527,7 +527,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 500M               # This is high to enable supporting the recommendationCache feature flag use case
+          memory: 600M               # This is high to enable supporting the recommendationCache feature flag use case
     restart: unless-stopped
     ports:
       - "${RECOMMENDATION_SERVICE_PORT}"
@@ -563,7 +563,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 20M
+          memory: 30M
     restart: unless-stopped
     ports:
       - "${SHIPPING_SERVICE_PORT}"
@@ -588,7 +588,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 50M
+          memory: 80M
     restart: unless-stopped
     environment:
       - FLAGD_OTEL_COLLECTOR_URI=${OTEL_COLLECTOR_HOST}:${OTEL_COLLECTOR_PORT_GRPC}
@@ -617,7 +617,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 150M
+          memory: 190M
     restart: unless-stopped
     environment:
       - OTEL_EXPORTER_OTLP_ENDPOINT=http://${OTEL_COLLECTOR_HOST}:${OTEL_COLLECTOR_PORT_HTTP}
@@ -648,7 +648,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 600M
+          memory: 800M
     restart: unless-stopped
     environment:
       - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
@@ -673,7 +673,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 20M
+          memory: 30M
     restart: unless-stopped
     ports:
       - "${VALKEY_PORT}"
@@ -696,7 +696,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 400M
+          memory: 600M
     restart: unless-stopped
     ports:
       - "${JAEGER_SERVICE_PORT}"         # Jaeger UI
@@ -712,7 +712,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 100M
+          memory: 500M
     restart: unless-stopped
     environment:
       - "GF_INSTALL_PLUGINS=grafana-opensearch-datasource"
@@ -730,7 +730,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 200M
+          memory: 500M
     restart: unless-stopped
     command: [ "--config=/etc/otelcol-config.yml", "--config=/etc/otelcol-config-extras.yml" ]
     user: 0:0
@@ -774,7 +774,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 300M
+          memory: 600M
     restart: unless-stopped
     ports:
       - "${PROMETHEUS_SERVICE_PORT}:${PROMETHEUS_SERVICE_PORT}"
@@ -818,11 +818,13 @@ services:
   cadvisor:
     image: gcr.io/cadvisor/cadvisor:latest
     container_name: cadvisor
-    restart: unless-stopped
     ports:
-      - "8080:8080"  # Exposes cAdvisor's HTTP endpoint for Prometheus to scrape
+      - "8080:8080"
     volumes:
-      - /:/rootfs:ro           # Mount the host root filesystem for container info
-      - /var/run:/var/run:rw    # Access to Docker's socket
-      - /sys:/sys:ro            # Access to system files for resource metrics
+      - /:/rootfs:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /sys:/sys:ro
       - /var/lib/docker/:/var/lib/docker:ro
+    networks:
+      - default
+    logging: *logging

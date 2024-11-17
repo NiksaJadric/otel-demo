@@ -12,6 +12,8 @@
 \#*\#
 
 docker-compose.override.yml
+github-otel
+github-otel.pub
 
 # Eclipse
 .classpath
