@@ -1,0 +1,196 @@
+# Copyright The OpenTelemetry Authors
+# SPDX-License-Identifier: Apache-2.0
+
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: ${env:OTEL_COLLECTOR_HOST}:${env:OTEL_COLLECTOR_PORT_GRPC}
+      http:
+        endpoint: ${env:OTEL_COLLECTOR_HOST}:${env:OTEL_COLLECTOR_PORT_HTTP}
+        cors:
+          allowed_origins:
+            - "http://*"
+            - "https://*"
+  httpcheck/frontendproxy:
+    targets:
+      - endpoint: http://frontendproxy:${env:ENVOY_PORT}
+  docker_stats:
+    endpoint: unix:///var/run/docker.sock
+  redis:
+    endpoint: "valkey-cart:6379"
+    username: "valkey"
+    collection_interval: 10s
+  hostmetrics:
+    root_path: /hostfs
+    scrapers:
+      cpu:
+        metrics:
+          system.cpu.utilization:
+            enabled: true
+      disk:
+      load:
+      filesystem:
+        exclude_mount_points:
+          mount_points:
+            - /dev/*
+            - /proc/*
+            - /sys/*
+            - /run/k3s/containerd/*
+            - /var/lib/docker/*
+            - /var/lib/kubelet/*
+            - /snap/*
+          match_type: regexp
+        exclude_fs_types:
+          fs_types:
+            - autofs
+            - binfmt_misc
+            - bpf
+            - cgroup2
+            - configfs
+            - debugfs
+            - devpts
+            - devtmpfs
+            - fusectl
+            - hugetlbfs
+            - iso9660
+            - mqueue
+            - nsfs
+            - overlay
+            - proc
+            - procfs
+            - pstore
+            - rpc_pipefs
+            - securityfs
+            - selinuxfs
+            - squashfs
+            - sysfs
+            - tracefs
+          match_type: strict
+      memory:
+        metrics:
+          system.memory.utilization:
+            enabled: true
+      network:
+      paging:
+      processes:
+      process:
+        mute_process_exe_error: true
+        mute_process_io_error: true
+        mute_process_user_error: true
+  prometheus:
+    config:
+      scrape_configs:
+        - job_name: 'otelcol'
+          scrape_interval: 10s
+          static_configs:
+            - targets: ['0.0.0.0:8888']
+
+exporters:
+  debug:
+  otlp:
+    endpoint: "jaeger:4317"
+    tls:
+      insecure: true
+  otlphttp/prometheus:
+    endpoint: "http://prometheus:9090/api/v1/otlp"
+    tls:
+      insecure: true
+  opensearch:
+    logs_index: otel
+    http:
+      endpoint: "http://opensearch:9200"
+      tls:
+        insecure: true
+
+processors:
+  batch:
+  probabilistic_sampler:
+    sampling_percentage: 50
+  transform:
+    error_mode: ignore
+    trace_statements:
+      - context: span
+        statements:
+          - replace_pattern(name, "\\?.*", "")
+          - replace_match(name, "GET /api/products/*", "GET /api/products/{productId}")
+  attributes:
+    actions:
+      - key: M5.test_attribute_01
+        value: "This span is marked with test attribute 01"
+        action: insert
+      - key: M5.test_attribute_02
+        value: "This span is marked with test attribute 02"
+        action: insert
+      - key: M5.test_attribute_03
+        value: "This span is marked with test attribute 03"
+        action: insert
+      - key: M5.test_attribute_04
+        value: "This span is marked with test attribute 04"
+        action: insert
+      - key: M5.test_attribute_05
+        value: "This span is marked with test attribute 05"
+        action: insert
+      - key: M5.test_attribute_06
+        value: "This span is marked with test attribute 06"
+        action: insert
+      - key: M5.test_attribute_07
+        value: "This span is marked with test attribute 07"
+        action: insert
+      - key: M5.test_attribute_08
+        value: "This span is marked with test attribute 08"
+        action: insert
+      - key: M5.test_attribute_09
+        value: "This span is marked with test attribute 09"
+        action: insert
+      - key: M5.test_attribute_10
+        value: "This span is marked with test attribute 10"
+        action: insert
+      - key: M5.test_attribute_11
+        value: "This span is marked with test attribute 11"
+        action: insert
+      - key: M5.test_attribute_12
+        value: "This span is marked with test attribute 12"
+        action: insert
+      - key: M5.test_attribute_13
+        value: "This span is marked with test attribute 13"
+        action: insert
+      - key: M5.test_attribute_14
+        value: "This span is marked with test attribute 14"
+        action: insert
+      - key: M5.test_attribute_15
+        value: "This span is marked with test attribute 15"
+        action: insert
+      - key: M5.test_attribute_16
+        value: "This span is marked with test attribute 16"
+        action: insert
+      - key: M5.test_attribute_17
+        value: "This span is marked with test attribute 17"
+        action: insert
+      - key: M5.test_attribute_18
+        value: "This span is marked with test attribute 18"
+        action: insert
+      - key: M5.test_attribute_19
+        value: "This span is marked with test attribute 19"
+        action: insert
+      - key: M5.test_attribute_20
+        value: "This span is marked with test attribute 20"
+        action: insert
+
+connectors:
+  spanmetrics:
+
+service:
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: [transform, probabilistic_sampler, batch, attributes]
+      exporters: [otlp, debug, spanmetrics]
+    metrics:
+      receivers: [hostmetrics, docker_stats, httpcheck/frontendproxy, otlp, prometheus, redis, spanmetrics]
+      processors: [batch]
+      exporters: [otlphttp/prometheus, debug]
+    logs:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [opensearch, debug]

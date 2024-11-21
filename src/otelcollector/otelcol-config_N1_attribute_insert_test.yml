@@ -87,11 +87,6 @@ receivers:
           scrape_interval: 10s
           static_configs:
             - targets: ['0.0.0.0:8888']
-        - job_name: 'docker'
-          scrape_interval: 10s
-          static_configs:
-            - targets: ['localhost:9090']
-
 
 exporters:
   debug:
@@ -122,11 +117,8 @@ processors:
           - replace_match(name, "GET /api/products/*", "GET /api/products/{productId}")
   attributes:
     actions:
-      - key: Niksa.masters_config
-        value: "Niksa_conf_01"
-        action: insert
-      - key: Niksa.masters_config_addon
-        value: "Niksa_conf_addon"
+      - key: Niksa.test_attribute_A
+        value: "This span is marked with test attribute A"
         action: insert
 
 connectors:
