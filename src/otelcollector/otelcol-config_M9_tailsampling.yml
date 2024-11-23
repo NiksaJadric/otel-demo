@@ -106,8 +106,10 @@ exporters:
         insecure: true
 
 processors:
-  batch:
   tail_sampling:
+    decision_wait: 10s 
+    num_traces: 100
+    expected_new_traces_per_sec: 10
     policies:
       [          
         {
@@ -124,6 +126,7 @@ processors:
           # could be removed when https://github.com/vercel/next.js/pull/64852 is fixed upstream
           - replace_pattern(name, "\\?.*", "")
           - replace_match(name, "GET /api/products/*", "GET /api/products/{productId}")
+  batch:
 
 
 connectors:
