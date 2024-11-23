@@ -138,7 +138,7 @@ service:
   pipelines:
     traces:
       receivers: [otlp]
-      processors: [transform, tail_sampling, batch]
+      processors: [transform, batch, tail_sampling]
       exporters: [otlp, debug, spanmetrics]
     metrics:
       receivers: [hostmetrics, docker_stats, httpcheck/frontendproxy, otlp, prometheus, redis, spanmetrics]
