@@ -107,6 +107,20 @@ exporters:
 
 processors:
   batch:
+  tail_sampling:
+    decision_wait: 10s  # Wait up to 10 seconds for a decision
+    num_traces: 500     # Maximum number of traces to buffer
+    expected_new_traces_per_sec: 10  # Expected new traces per second
+    decision_cache:
+      sampled_cache_size: 100  # Cache size for sampled traces
+    policies:
+      [
+        {
+          name: error-sampling-policy,
+          type: status_code,
+          status_code: { status_codes: [ERROR] }
+        }
+      ]
   transform:
     error_mode: ignore
     trace_statements:
@@ -115,11 +129,7 @@ processors:
           # could be removed when https://github.com/vercel/next.js/pull/64852 is fixed upstream
           - replace_pattern(name, "\\?.*", "")
           - replace_match(name, "GET /api/products/*", "GET /api/products/{productId}")
-  attributes:
-    actions:
-      - key: Niksa.masters_config
-        value: "Niksa_conf_01"
-        action: insert
+
 
 connectors:
   spanmetrics:
@@ -128,7 +138,7 @@ service:
   pipelines:
     traces:
       receivers: [otlp]
-      processors: [transform, batch, attributes] # add attributes processor here
+      processors: [transform, tail_sampling, batch]
       exporters: [otlp, debug, spanmetrics]
     metrics:
       receivers: [hostmetrics, docker_stats, httpcheck/frontendproxy, otlp, prometheus, redis, spanmetrics]
