@@ -108,17 +108,20 @@ exporters:
 processors:
   batch:
   tail_sampling:
-    decision_wait: 10s  # Wait up to 10 seconds for a decision
-    num_traces: 500     # Maximum number of traces to buffer
-    expected_new_traces_per_sec: 10  # Expected new traces per second
+    decision_wait: 10s
+    num_traces: 500
+    expected_new_traces_per_sec: 10
     decision_cache:
-      sampled_cache_size: 100  # Cache size for sampled traces
+      sampled_cache_size: 100
     policies:
       [
         {
           name: error-sampling-policy,
-          type: status_code,
-          status_code: { status_codes: [ERROR] }
+          type: string_attribute,
+          string_attribute: {
+            key: "otel.status_code",
+            values: ["ERROR"]
+          }
         }
       ]
   transform:
