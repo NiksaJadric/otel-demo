@@ -107,6 +107,8 @@ exporters:
 
 processors:
   batch:
+  probabilistic_sampler:
+    sampling_percentage: 20
   transform:
     error_mode: ignore
     trace_statements:
@@ -115,11 +117,7 @@ processors:
           # could be removed when https://github.com/vercel/next.js/pull/64852 is fixed upstream
           - replace_pattern(name, "\\?.*", "")
           - replace_match(name, "GET /api/products/*", "GET /api/products/{productId}")
-  attributes:
-    actions:
-      - key: Niksa.masters_config
-        value: "Niksa_conf_01"
-        action: insert
+
 
 connectors:
   spanmetrics:
@@ -128,7 +126,7 @@ service:
   pipelines:
     traces:
       receivers: [otlp]
-      processors: [transform, batch, attributes] # add attributes processor here
+      processors: [transform, batch]
       exporters: [otlp, debug, spanmetrics]
     metrics:
       receivers: [hostmetrics, docker_stats, httpcheck/frontendproxy, otlp, prometheus, redis, spanmetrics]
@@ -136,5 +134,5 @@ service:
       exporters: [otlphttp/prometheus, debug]
     logs:
       receivers: [otlp]
-      processors: [batch]
+      processors: [probabilistic_sampler, batch]
       exporters: [opensearch, debug]

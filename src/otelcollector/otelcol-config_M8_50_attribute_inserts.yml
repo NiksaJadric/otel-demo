@@ -176,6 +176,96 @@ processors:
       - key: M5.test_attribute_20
         value: "This span is marked with test attribute 20"
         action: insert
+      - key: M5.test_attribute_21
+        value: "This span is marked with test attribute 21"
+        action: insert
+      - key: M5.test_attribute_22
+        value: "This span is marked with test attribute 22"
+        action: insert
+      - key: M5.test_attribute_23
+        value: "This span is marked with test attribute 23"
+        action: insert
+      - key: M5.test_attribute_24
+        value: "This span is marked with test attribute 24"
+        action: insert
+      - key: M5.test_attribute_25
+        value: "This span is marked with test attribute 25"
+        action: insert
+      - key: M5.test_attribute_26
+        value: "This span is marked with test attribute 26"
+        action: insert
+      - key: M5.test_attribute_27
+        value: "This span is marked with test attribute 27"
+        action: insert
+      - key: M5.test_attribute_28
+        value: "This span is marked with test attribute 28"
+        action: insert
+      - key: M5.test_attribute_29
+        value: "This span is marked with test attribute 29"
+        action: insert
+      - key: M5.test_attribute_30
+        value: "This span is marked with test attribute 30"
+        action: insert
+      - key: M5.test_attribute_31
+        value: "This span is marked with test attribute 31"
+        action: insert
+      - key: M5.test_attribute_32
+        value: "This span is marked with test attribute 32"
+        action: insert
+      - key: M5.test_attribute_33
+        value: "This span is marked with test attribute 33"
+        action: insert
+      - key: M5.test_attribute_34
+        value: "This span is marked with test attribute 34"
+        action: insert
+      - key: M5.test_attribute_35
+        value: "This span is marked with test attribute 35"
+        action: insert
+      - key: M5.test_attribute_36
+        value: "This span is marked with test attribute 36"
+        action: insert
+      - key: M5.test_attribute_37
+        value: "This span is marked with test attribute 37"
+        action: insert
+      - key: M5.test_attribute_38
+        value: "This span is marked with test attribute 38"
+        action: insert
+      - key: M5.test_attribute_39
+        value: "This span is marked with test attribute 39"
+        action: insert
+      - key: M5.test_attribute_40
+        value: "This span is marked with test attribute 40"
+        action: insert      
+      - key: M5.test_attribute_41
+        value: "This span is marked with test attribute 41"
+        action: insert
+      - key: M5.test_attribute_42
+        value: "This span is marked with test attribute 42"
+        action: insert
+      - key: M5.test_attribute_43
+        value: "This span is marked with test attribute 43"
+        action: insert
+      - key: M5.test_attribute_44
+        value: "This span is marked with test attribute 44"
+        action: insert
+      - key: M5.test_attribute_45
+        value: "This span is marked with test attribute 45"
+        action: insert
+      - key: M5.test_attribute_46
+        value: "This span is marked with test attribute 46"
+        action: insert
+      - key: M5.test_attribute_47
+        value: "This span is marked with test attribute 47"
+        action: insert
+      - key: M5.test_attribute_48
+        value: "This span is marked with test attribute 48"
+        action: insert
+      - key: M5.test_attribute_49
+        value: "This span is marked with test attribute 49"
+        action: insert
+      - key: M5.test_attribute_50
+        value: "This span is marked with test attribute 50"
+        action: insert
 
 connectors:
   spanmetrics:
