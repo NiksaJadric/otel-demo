@@ -43,6 +43,7 @@ src/frontend/cypress/videos
 src/frontend/cypress/screenshots
 src/shippingservice/target/
 test/tracetesting/tracetesting-vars.yaml
+src/flagd/demo.flagd.json
 
 # Ignore copied/generated protobuf files
 /src/cartservice/src/protos/
