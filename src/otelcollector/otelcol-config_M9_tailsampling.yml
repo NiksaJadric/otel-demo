@@ -106,17 +106,23 @@ exporters:
         insecure: true
 
 processors:
+  batch:
   tail_sampling:
-    decision_wait: 10s 
-    num_traces: 100
+    decision_wait: 10s
+    num_traces: 500
     expected_new_traces_per_sec: 10
+    decision_cache:
+      sampled_cache_size: 100
     policies:
-      [          
+      [
         {
-          name: errors-policy,
-          type: status_code,
-          status_code: {status_codes: [ERROR]}
-        },
+          name: error-sampling-policy,
+          type: string_attribute,
+          string_attribute: {
+            key: "otel.status_code",
+            values: ["ERROR"]
+          }
+        }
       ]
   transform:
     error_mode: ignore
@@ -126,7 +132,6 @@ processors:
           # could be removed when https://github.com/vercel/next.js/pull/64852 is fixed upstream
           - replace_pattern(name, "\\?.*", "")
           - replace_match(name, "GET /api/products/*", "GET /api/products/{productId}")
-  batch:
 
 
 connectors:
