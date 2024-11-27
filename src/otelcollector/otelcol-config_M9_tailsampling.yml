@@ -119,7 +119,7 @@ processors:
           name: error-sampling-policy,
           type: status_code,
           status_code: { status_codes: [ERROR] }
-        }
+        },
       ]
   #transform:
   #  error_mode: ignore
