@@ -107,6 +107,35 @@ exporters:
 
 processors:
   batch:
+  tail_sampling:
+    policies:
+      [
+        {
+          name: errors,
+          type: status_code,
+          status_code: ERROR
+        },
+        {
+          name: probability-sampler,
+          type: probabilistic,
+          sampling_percentage: 10
+        }
+      ]
+  filter:
+    spans:
+      exclude:
+        attributes:
+          - key: http.url
+            value: .*/health
+  attributes:
+    actions:
+      - key: user.segment
+        from_attribute: user.id
+        action: insert
+        mapping:
+          "123": "premium"
+          "456": "standard"
+          "*": "free"
   transform:
     error_mode: ignore
     trace_statements:
@@ -124,7 +153,7 @@ service:
   pipelines:
     traces:
       receivers: [otlp]
-      processors: [transform, batch]
+      processors: [transform, tail_sampling, filter, attributes, batch]
       exporters: [otlp, debug, spanmetrics]
     metrics:
       receivers: [hostmetrics, docker_stats, httpcheck/frontendproxy, otlp, prometheus, redis, spanmetrics]
