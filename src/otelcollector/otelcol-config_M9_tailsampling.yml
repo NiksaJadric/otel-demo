@@ -124,14 +124,14 @@ processors:
           probabilistic: {sampling_percentage: 25}
         },
       ]
-  #transform:
-  #  error_mode: ignore
-  #  trace_statements:
-  #    - context: span
-  #      statements:
-  #        # could be removed when https://github.com/vercel/next.js/pull/64852 is fixed upstream
-  #        - replace_pattern(name, "\\?.*", "")
-  #        - replace_match(name, "GET /api/products/*", "GET /api/products/{productId}")
+  transform:
+    error_mode: ignore
+    trace_statements:
+      - context: span
+        statements:
+          # could be removed when https://github.com/vercel/next.js/pull/64852 is fixed upstream
+          - replace_pattern(name, "\\?.*", "")
+          - replace_match(name, "GET /api/products/*", "GET /api/products/{productId}")
 
 
 connectors:
@@ -141,7 +141,7 @@ service:
   pipelines:
     traces:
       receivers: [otlp]
-      processors: [tail_sampling] #, transform, batch]
+      processors: [tail_sampling, transform, batch]
       exporters: [otlp, debug, spanmetrics]
     metrics:
       receivers: [hostmetrics, docker_stats, httpcheck/frontendproxy, otlp, prometheus, redis, spanmetrics]
