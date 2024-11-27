@@ -106,7 +106,7 @@ exporters:
         insecure: true
 
 processors:
-  #batch:
+  batch:
   tail_sampling:
     decision_wait: 10s  # Wait up to 10 seconds for a decision
     num_traces: 500     # Maximum number of traces to buffer
