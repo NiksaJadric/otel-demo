@@ -116,7 +116,7 @@ processors:
         {
           name: errors-policy,
           type: status_code,
-          status_code: {status_codes: [ERROR]},
+          status_code: {status_codes: [ERROR]}
         },
       ]
   transform:
@@ -136,7 +136,7 @@ service:
   pipelines:
     traces:
       receivers: [otlp]
-      processors: [tail_sampling, batch]
+      processors: [transform, tail_sampling, batch]
       exporters: [otlp, debug, spanmetrics]
     metrics:
       receivers: [hostmetrics, docker_stats, httpcheck/frontendproxy, otlp, prometheus, redis, spanmetrics]
