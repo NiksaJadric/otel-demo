@@ -111,14 +111,14 @@ processors:
     policies:
       [
         {
-          name: errors,
+          name: errors-policy,
           type: status_code,
-          status_code: ERROR
+          status_code: {status_codes: [ERROR]}
         },
         {
           name: probability-sampler,
           type: probabilistic,
-          sampling_percentage: 10
+          probabilistic: {sampling_percentage: 10}
         }
       ]
   filter:
