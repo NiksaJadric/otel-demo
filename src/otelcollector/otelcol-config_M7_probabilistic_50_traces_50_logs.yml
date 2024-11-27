@@ -107,10 +107,8 @@ exporters:
 
 processors:
   batch:
-  probabilistic_sampler_traces:
-    sampling_percentage: 50  # 50% sampling for traces
-  probabilistic_sampler_logs:
-    sampling_percentage: 50  # 50% sampling for logs  
+  probabilistic_sampler:
+    sampling_percentage: 50 
   transform:
     error_mode: ignore
     trace_statements:
@@ -128,7 +126,7 @@ service:
   pipelines:
     traces:
       receivers: [otlp]
-      processors: [transform, probabilistic_sampler_traces, batch]
+      processors: [transform, probabilistic_sampler, batch]
       exporters: [otlp, debug, spanmetrics]
     metrics:
       receivers: [hostmetrics, docker_stats, httpcheck/frontendproxy, otlp, prometheus, redis, spanmetrics]
@@ -136,5 +134,5 @@ service:
       exporters: [otlphttp/prometheus, debug]
     logs:
       receivers: [otlp]
-      processors: [probabilistic_sampler_logs, batch]
+      processors: [probabilistic_sampler, batch]
       exporters: [opensearch, debug]
