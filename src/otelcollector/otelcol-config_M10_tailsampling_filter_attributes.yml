@@ -121,12 +121,6 @@ processors:
           probabilistic: {sampling_percentage: 10}
         }
       ]
-  filter:
-    spans:
-      exclude:
-        attributes:
-          - key: http.url
-            value: .*/health
   attributes:
     actions:
       - key: test_attribute_01
@@ -149,7 +143,7 @@ service:
   pipelines:
     traces:
       receivers: [otlp]
-      processors: [transform, tail_sampling, filter, attributes, batch]
+      processors: [transform, tail_sampling, attributes, batch]
       exporters: [otlp, debug, spanmetrics]
     metrics:
       receivers: [hostmetrics, docker_stats, httpcheck/frontendproxy, otlp, prometheus, redis, spanmetrics]
