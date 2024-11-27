@@ -108,17 +108,20 @@ exporters:
 processors:
   batch:
   tail_sampling:
-    decision_wait: 10s  # Wait up to 10 seconds for a decision
-    num_traces: 500     # Maximum number of traces to buffer
-    expected_new_traces_per_sec: 10  # Expected new traces per second
-    decision_cache:
-      sampled_cache_size: 100  # Cache size for sampled traces
+    decision_wait: 10s 
+    num_traces: 100
+    expected_new_traces_per_sec: 10
     policies:
-      [
+      [          
         {
-          name: error-sampling-policy,
+          name: errors-policy,
           type: status_code,
-          status_code: { status_codes: [ERROR] }
+          status_code: {status_codes: [ERROR]}
+        },
+        {
+          name: randomized-policy,
+          type: probabilistic,
+          probabilistic: {sampling_percentage: 25}
         },
       ]
   #transform:
