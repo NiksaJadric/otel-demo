@@ -115,7 +115,7 @@ processors:
       [          
         {
           name: errors-policy,
-          type: status_code,
+          type: otel.status_code,
           otel.status_code: {status_codes: [ERROR]}
         },
       ]
