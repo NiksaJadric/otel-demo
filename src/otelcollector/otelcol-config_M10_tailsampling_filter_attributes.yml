@@ -129,13 +129,9 @@ processors:
             value: .*/health
   attributes:
     actions:
-      - key: user.segment
-        from_attribute: user.id
+      - key: test_attribute_01
+        value: "This span is marked with test attribute 01"
         action: insert
-        mapping:
-          "123": "premium"
-          "456": "standard"
-          "*": "free"
   transform:
     error_mode: ignore
     trace_statements:
