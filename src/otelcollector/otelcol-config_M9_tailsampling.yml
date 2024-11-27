@@ -115,8 +115,8 @@ processors:
       [          
         {
           name: errors-policy,
-          type: otel.status_code,
-          otel.status_code: {status_codes: [ERROR]}
+          type: status_code,
+          status_code: {status_codes: [ERROR]},
         },
       ]
   transform:
@@ -136,7 +136,7 @@ service:
   pipelines:
     traces:
       receivers: [otlp]
-      processors: [tailtransform, batch]
+      processors: [tail_sampling, transform, batch]
       exporters: [otlp, debug, spanmetrics]
     metrics:
       receivers: [hostmetrics, docker_stats, httpcheck/frontendproxy, otlp, prometheus, redis, spanmetrics]
