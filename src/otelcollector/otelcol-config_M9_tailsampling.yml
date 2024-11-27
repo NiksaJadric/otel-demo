@@ -113,9 +113,7 @@ processors:
         {
           name: errors-policy,
           type: status_code,
-          status_code:
-           - status_codes: 
-             - ERROR
+          status_code: {status_codes: [ERROR]}
         },
       ]
   transform:
